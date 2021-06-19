@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Combine
 
 /// UserDefaultsを使いやすくするためのプロパティラッパー
 /// 以下を参考にしている
@@ -14,10 +15,16 @@ public struct UserDefaultValue<T: Codable> {
     
     private let key: String
     private let defaultValue: T
-
+    
     public init(key: String, defaultValue: T) {
         self.key = key
         self.defaultValue = defaultValue
+    }
+    
+    private var subject = PassthroughSubject<T, Never>()
+    
+    public var projectedValue: AnyPublisher<T, Never> {
+        subject.eraseToAnyPublisher()
     }
 
     public var wrappedValue: T {
@@ -38,6 +45,9 @@ public struct UserDefaultValue<T: Codable> {
             
             // Set value to UserDefaults
             UserDefaults.standard.set(data, forKey: key)
+            
+            // 値の送信
+            subject.send(newValue)
         }
     }
 }

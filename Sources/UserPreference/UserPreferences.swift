@@ -9,6 +9,7 @@ import Foundation
 /// ユーザー設定を提供するプロトコル
 public protocol UserPreferences: AnyObject {
     /// 保存先を取得
+    /// デフォルトはUserDefaults.standardが提供される
     var store: any KeyValueStorable { get }
     
     /// カテゴリ
@@ -18,6 +19,9 @@ public protocol UserPreferences: AnyObject {
 }
 
 extension UserPreferences {
+    /// デフォルトのストアを提供
+    var store: KeyValueStorable { UserDefaults.standard }
+    
     /// デフォルトのカテゴリを提供
     var category: Category { .default }
     

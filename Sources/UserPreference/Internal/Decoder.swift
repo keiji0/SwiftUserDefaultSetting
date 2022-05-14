@@ -153,19 +153,16 @@ private struct UnkeyedContainer: UnkeyedDecodingContainer {
         }
     }
     
-    mutating func decode<T>(_ type: T.Type) throws -> T {
-        try decode() as! T
+    mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+        try SingleContainer(try decode(), codingPath: currentPath).decode(type)
     }
     
     mutating func nestedContainer<NestedKey>(keyedBy type: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-        let newPath = codingPath + [ AnyCodingKey(intValue: count!) ]
-        let container = try KeyedContainer<NestedKey>(try decode(), codingPath: newPath)
-        return KeyedDecodingContainer(container)
+        KeyedDecodingContainer(try KeyedContainer<NestedKey>(try decode(), codingPath: currentPath))
     }
     
     mutating func nestedUnkeyedContainer() throws -> UnkeyedDecodingContainer {
-        let newPath = codingPath + [ AnyCodingKey(intValue: count!) ]
-        return UnkeyedContainer(try decode(), codingPath: newPath)
+        UnkeyedContainer(try decode(), codingPath: currentPath)
     }
     
     func superDecoder() throws -> Decoder {
@@ -176,6 +173,10 @@ private struct UnkeyedContainer: UnkeyedDecodingContainer {
         assert(!isAtEnd)
         defer { self.currentIndex += 1 }
         return value[currentIndex]
+    }
+    
+    private var currentPath: [CodingKey] {
+        codingPath + [ AnyCodingKey(intValue: count!) ]
     }
 }
 

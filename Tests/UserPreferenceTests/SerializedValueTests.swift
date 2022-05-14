@@ -120,6 +120,18 @@ final class SerializedValueTests: XCTestCase {
         XCTAssertEqual(v1, v2)
     }
     
+    func test_Codableを要素に持つ配列() {
+        struct Foo: Codable, Equatable {
+            var uuid = UUID()
+        }
+        struct Bar: Codable, Equatable {
+            var foo = [Foo](arrayLiteral: .init())
+        }
+        let v1 = Bar()
+        let v2 = convert(v1)
+        XCTAssertEqual(v1, v2)
+    }
+    
     // MARK: - Private
     
     private func convert<T: Codable>(_ value: T, _ key: String = "$test") -> T {

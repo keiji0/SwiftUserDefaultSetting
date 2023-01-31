@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import AppTools
 
 /// ユーザー設定を提供するプロトコル
 public protocol UserPreferences: AnyObject {

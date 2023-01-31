@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swift-app-tools",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/keiji0/swift-app-tools",
+      "state" : {
+        "branch" : "main",
+        "revision" : "49e18bfb0ffa05717840388d3dd536edcffedc78"
+      }
+    }
+  ],
+  "version" : 2
+}

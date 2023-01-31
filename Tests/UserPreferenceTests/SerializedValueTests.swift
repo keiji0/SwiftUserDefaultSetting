@@ -1,5 +1,6 @@
 import XCTest
 import Combine
+import AppTools
 @testable import UserPreference
 
 final class SerializedValueTests: XCTestCase {
